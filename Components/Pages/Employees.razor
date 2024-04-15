@@ -1,0 +1,97 @@
+﻿@page "/employees"
+
+<h1>Employee System</h1>
+
+<p>This component demonstrates showing data.</p>
+
+@if (employees == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Hourly Salary</th>
+                <th>Date Hired</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var employee in employees)
+            {
+                <tr>
+                    <td>@employee.Name</td>
+                    <td>$@employee.HourlySalary</td>
+                    <td>@employee.DateHired.ToShortDateString()</td>
+                    <td>
+                        @if (selectedEmployee == employee)
+                        {
+                            <input type="text" @bind="employee.Name" />
+                            <input type="number" step="0.01" @bind="employee.HourlySalary" />
+                            <button class="btn btn-success" @onclick="() => SaveChanges(employee)">Save</button>
+                            <button class="btn btn-danger" @onclick="() => CancelChanges()">Cancel</button>
+                            <button class="btn btn-danger" @onclick="() => RemoveEmployee(employee)">Remove</button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-primary" @onclick="() => EditEmployee(employee)">Edit</button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <button class="btn btn-primary" @onclick="AddEmployee">Add Employee</button>
+}
+
+<input type="text" @bind="newEmployeeName" placeholder="Enter employee name" />
+<input type="number" step="0.01" @bind="newEmployeeSalary" placeholder="Enter employee hourly salary" />
+
+@code {
+    private List<Employee> employees = new List<Employee>();
+    private string newEmployeeName = string.Empty;
+    private decimal newEmployeeSalary = 0;
+    private Employee? selectedEmployee = null;
+
+    private void AddEmployee()
+    {
+        // Add a new employee with today's date as the date hired
+        employees.Add(new Employee { Name = newEmployeeName, HourlySalary = newEmployeeSalary, DateHired = DateOnly.FromDateTime(DateTime.Now) });
+        newEmployeeName = string.Empty;
+        newEmployeeSalary = 0;
+    }
+
+    private void EditEmployee(Employee employee)
+    {
+        // Set the selected employee
+        selectedEmployee = employee;
+    }
+
+    private void SaveChanges(Employee employee)
+    {
+        // Save changes to the employee
+        selectedEmployee = null;
+    }
+
+    private void CancelChanges()
+    {
+        // Cancel changes and reset the selected employee
+        selectedEmployee = null;
+    }
+
+    private void RemoveEmployee(Employee employee)
+    {
+        // Remove the specified employee
+        employees.Remove(employee);
+    }
+
+    private class Employee
+    {
+        public string Name { get; set; }
+        public decimal HourlySalary { get; set; }
+        public DateOnly DateHired { get; set; }
+    }
+}
