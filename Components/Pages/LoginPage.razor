@@ -1,0 +1,28 @@
+﻿@page "/"
+@inject NavigationManager Navigation
+
+<h1>Login to Unison</h1>
+
+<div>
+    <label for="username">Username:</label>
+    <input type="text" id="username" @bind-value="@Username" />
+</div>
+
+<div>
+    <label for="password">Password:</label>
+    <input type="password" id="password" @bind-value="@Password" />
+</div>
+
+<button @onclick="Login">Login</button>
+
+@code {
+    private string Username { get; set; }
+    private string Password { get; set; }
+
+    private void Login()
+    {
+        // Perform login logic here
+        // If login is successful, redirect to the home page
+        Navigation.NavigateTo("/home");
+    }
+}
