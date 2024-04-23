@@ -1,4 +1,6 @@
 ﻿@page "/employees"
+@inject NavigationManager Navigation
+﻿
 
 <h1>Employee System</h1>
 
@@ -31,7 +33,7 @@ else
             {
                 <tr>
                     <td>@employee.Name</td>
-                    <td>$@employee.HourlySalary:N2</td>
+                    <td>$@employee.HourlySalary</td>
                     <td>@employee.DateHired.ToShortDateString()</td>
                     <td><button class="btn btn-danger" @onclick="() => RemoveEmployee(employee)">Remove</button></td>
                 </tr>
