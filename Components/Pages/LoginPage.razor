@@ -15,14 +15,50 @@
 
 <button @onclick="Login">Login</button>
 
+@if (ShowSuccessPrompt)
+{
+    <div class="alert alert-success mt-3" role="alert">
+        Success
+    </div>
+}
+
+@if (ShowErrorPrompt)
+{
+    <div class="alert alert-danger mt-3" role="alert">
+        Invalid username or password
+        <button type="button" class="btn btn-link" @onclick="ClearInput">Try again</button>
+    </div>
+}
+
 @code {
     private string Username { get; set; }
     private string Password { get; set; }
+    private bool ShowSuccessPrompt { get; set; }
+    private bool ShowErrorPrompt { get; set; }
 
-    private void Login()
+    private async Task Login()
     {
+        // Clear any existing prompts
+        ShowSuccessPrompt = false;
+        ShowErrorPrompt = false;
+
         // Perform login logic here
-        // If login is successful, redirect to the home page
+        // If login is unsuccessful, show the error prompt
+        if (Username != "admin" || Password != "password")
+        {
+            ShowErrorPrompt = true;
+            return;
+        }
+
+        // If login is successful, show the success prompt and redirect to the home page
+        ShowSuccessPrompt = true;
+        await Task.Delay(1000);
         Navigation.NavigateTo("/home");
+    }
+
+    private void ClearInput()
+    {
+        Username = string.Empty;
+        Password = string.Empty;
     }
 }
